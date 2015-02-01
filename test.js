@@ -1,15 +1,24 @@
 'use strict';
 
 //Node application
-var 
-  http = require( 'http' ),
-  express = require( 'express' ),
-  app = express(),
-  url = require('url'),
-  io = require('socket.io'),
+//var 
+  //http = require( 'http' ),
+  //express = require( 'express' ),
+  //app = express(),
+  //url = require('url'),
+  //io = require('socket.io'),
 
-  server = http.createServer( app );
+  //server = http.createServer( app );
   
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+http.listen(3000, function(){
+  console.log('Express server listening on port %d in %s mode',http.address().port, app.settings.env);
+});
+var sessionsConnections = {};
+
 
 //Express Middleware
 var 
@@ -32,6 +41,7 @@ var
   	response.send( 'Hello World from Node with Express and nodemon!' );
 });
 
+//test.html
   app.get('/test.html', function (request, response){
     var options = {
     	root: __dirname,// + '/public/',
@@ -64,21 +74,17 @@ var
 
 });
 
-//Recieve Post from Website
 
+io.on('connection', function(socket){
 
-app.post('/sendtext', function(request, response) {
-	console.log("button press recieved");
-  	response.send('You sent the name "' + request.body.form + '".');
-	
+  sessionsConnections[socket.handshake.sessionID] = socket;
+  console.log('connected to client\n')
+  socket.on('text', function(msg){
+    console.log('message recieved ' + msg);
+    socket.emit('response', msg);
+    console.log('message emitted ' + msg);
+  });
 });
 
 
-server.listen( 3000 );
-console.log('Express server listening on port %d in %s mode',server.address().port, app.settings.env);
 
-//Socket.IO
-var websock = io.listen(server);
-websock.on('connection', function(socket){
-    socket.emit('message', {'message': 'hello world from socket.io'});
-});
