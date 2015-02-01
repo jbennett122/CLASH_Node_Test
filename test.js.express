@@ -1,0 +1,38 @@
+'use strict';
+
+//Node application
+var 
+  http = require( 'http' ),
+  express = require( 'express' ),
+  app = express(),
+  //response_text = 'Hello World from Node with Express',
+
+  server = http.createServer( app );
+
+//Express Middleware
+var 
+  morgan = require('morgan'),
+  bodyParser = require('body-parser'),
+  methodOverride = require('method-override');
+
+  app.use(morgan('combined'));
+  app.use(bodyParser.json());
+  app.use(methodOverride('X-HTTP-Method-Override'));
+  
+  morgan('combined',{
+  	skip: function(req,res) {return res.statusCode < 400} 
+  });
+
+
+  
+  app.get( '/', function ( request, response ) {
+  
+  response.send( 'Hello World from Node with Express and nodemon' );
+
+  response.end();
+
+});
+
+server.listen( 3000 );
+console.log('Express server listening on port %d in %s mode',server.address().port, app.settings.env);
+

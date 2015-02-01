@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CLASH Text Submit Test</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/redmond/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="/socket.io/socket.io.js"></script>
+<style>
+#resizable { width: 500px; height: 300px; padding: 0.5em; }
+#resizable h3 { text-align: left; margin: 0; }
+</style>
+<script>
+ $(function() {
+	 
+	$( "#resizable" ).resizable({
+	aspectRatio: 16 / 9
+	});
+	$( "#button" ).button();
+
+	$('#characterLeft').text('3000 characters remaining');
+	$('#resizable').keyup(function () {
+    		var max = 3000;
+    		var len = $(this).val().length;
+	    
+		if (len >= max) {
+		$('#characterLeft').text(' you have reached the limit');
+	    } else {
+		var ch = max - len;
+		$('#characterLeft').text(ch + ' characters remaining');
+	    }
+	});
+	
+});
+
+var socket = io.connect();
+socket.on('message', function(data){
+    console.log(data.message);
+});
+
+</script>
+</head>
+<body>
+	<form action="http://esl-clash.cs.odu.edu/sendtext" method="post">
+	<div id="enter">
+		<label for="resizable">Enter Text:</label>
+	<textarea id="resizable" cols="30" rows="10" wrap="physical" name="text" maxlength="3000" placeholder="Enter text to CLASH"></textarea>
+	<div for="resizable" id="characterLeft"></div>
+		<button type="submit" id="button">CLASH IT!</button>	
+	</div>
+	</form>
+<br>
+	<div id="resultSection">
+		<label for="NLTKresult">Result from NLTK:</label>
+		<p id="result"></p>
+	</div>
+
+
+</body>
+</html>
