@@ -104,14 +104,12 @@ io.on('connection', function(socket){
     socket.emit('response', message);
     console.log('message emitted ' + message);
 
-  });
- 
-  // end the input stream and allow the process to exit 
+  }); 
+   // end the input stream and allow the process to exit 
   pyshell.end(function (err) {
     if (err) throw err;
     console.log('finished');
   });
-
 
   });
 });
