@@ -16,7 +16,7 @@ var io = require('socket.io')(http);
 
 var PythonShell = require('python-shell');
 
-var pyshell = new PythonShell('parse_pos.py');
+
 
 http.listen(3000, function(){
   console.log('Express server listening on port %d in %s mode',http.address().port, app.settings.env);
@@ -85,32 +85,37 @@ var
 
 //Socket.IO and python-shell
 io.on('connection', function(socket){
+  
 
-  sessionsConnections[socket.handshake.sessionID] = socket;
-  console.log('connected to client\n')
-  socket.on('text', function(msg){
+    sessionsConnections[socket.handshake.sessionID] = socket;
     
-    console.log('message recieved ' + msg);
+    console.log('connected to client\n')
     
-    //Python NLTK
-  // sends the client input to the Python script via stdin 
-  pyshell.send(msg);
- 
-  pyshell.on('message', function (message) {
-  // received a message sent from the Python script (a simple "print" statement) 
-    console.log('response from python script', message);
-    
-    //send python output to client
-    socket.emit('response', message);
-    console.log('message emitted ' + message);
+    socket.on('text', function(msg){
 
-  }); 
-   // end the input stream and allow the process to exit 
-  pyshell.end(function (err) {
-    if (err) throw err;
-    console.log('finished');
-  });
+      var pyshell = new PythonShell('parse_pos.py');
+      
+      console.log('message recieved ' + msg);
+      
+      //Python NLTK
+      // sends the client input to the Python script via stdin 
+      pyshell.send(msg);
+     
+      pyshell.on('message', function (message) {
+    
+      // received a message sent from the Python script (a simple "print" statement) 
+      console.log('response from python script', message);
+      
+     //send python output to client
+      socket.emit('response', message);
+      console.log('message emitted ' + message);
 
+      // end the input stream and allow the process to exit 
+      pyshell.end(function (err) {
+        if (err) throw err;
+        console.log('finished'); }); 
+
+    });
   });
 });
 
