@@ -29,4 +29,5 @@ if __name__ == '__main__':
     
     #live code
     #argv = sys.argv
+    #prnt(type(argv))
     #main(argv)
