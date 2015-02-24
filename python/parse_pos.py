@@ -2,31 +2,29 @@
 
 import sys
 import nltk 
+import json
 
 
 
 def parse_text(inputText):
-    tokenized_text = nltk.word_tokenize(inputText)
-    return nltk.pos_tag(tokenized_text)
-
-def createJSON(pos_tag):
-    print pos_tag
-    
-    #for p in pos_tag:
-    #    print p
-        
+	out = list()
+	for para in inputText.splitlines():
+		pList = list()
+		sents = nltk.sent_tokenize(para.decode('utf-8'))
+		for sent in sents:
+			sList = list()
+			for (word,tag) in nltk.pos_tag(nltk.word_tokenize(sent)):
+				sList.append(word)
+				sList.append(tag)
+			pList.append(sList)
+		out.append(pList)
+	print(json.dumps(out))
             
 
 
 def main(argv):
-    pos_tag = parse_text(argv)
-    json_out = createJSON(pos_tag)
+    parse_text(argv[1])
 
 if __name__ == '__main__':
-    #testing code
-    argv = raw_input("")
+    argv = sys.argv
     main(argv)
-    
-    #live code
-    #argv = sys.argv
-    #main(argv)

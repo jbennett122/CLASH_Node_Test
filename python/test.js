@@ -18,7 +18,7 @@ var PythonShell = require('python-shell');
 
 
 
-http.listen(3000, function(){
+http.listen(9999, function(){
   console.log('Express server listening on port %d in %s mode',http.address().port, app.settings.env);
 });
 
@@ -92,7 +92,7 @@ io.on('connection', function(socket){
     socket.on('text', function(msg){
 		console.log('input: '+msg);
 		var options = {
-		  args: [msg]
+		  args: [msg.replace("â","")]
 		};
 		console.log('options: '+options);
 		
@@ -102,9 +102,12 @@ io.on('connection', function(socket){
 		  // results is an array consisting of messages collected during execution 
 		  console.log('result: '+results);
 		  var java = require("java");
-		   java.classpath.push("slash.jar");//Needs to be on the same path as of .js file
-		   var clasis = java.newInstanceSync("main.Main");
-		   clasis.main(results[0],1, function (error,data)
+		  console.log('after require')
+		   java.classpath.push("test.jar");//Needs to be on the same path as of .js file
+		   console.log('after push')
+		   var clasis = java.newInstanceSync("org.TestClass");
+		   console.log('after clasis')
+		   clasis.print(results[0],1,'aaa', function (error,data)
 			 { 
 				if(error){
 					console.log('err: '+error);
@@ -117,6 +120,7 @@ io.on('connection', function(socket){
 			   
 
 			 });
+			 console.log('after method')
 		});
 		console.log('\n\n===============================after io and pos\n\n')
   });
