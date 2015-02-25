@@ -15,6 +15,28 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var PythonShell = require('python-shell');
+var mysql      = require('mysql');
+
+/**
+  MYSQL
+**/
+
+var connection = mysql.createConnection({
+  host     : 'esl-clash.cs.odu.edu',
+  port     : '3306'
+  database : 'CLASH'
+});
+
+connection.query(' SELECT * FROM USER', function(err, rows) {
+     if(err){
+        console.log(err.code);
+     }
+     else{
+       console.log(rows);
+     }
+     
+});
+
 
 
 
