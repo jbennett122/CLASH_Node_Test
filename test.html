@@ -124,13 +124,29 @@
 					$(".Exception").css("font-weight","normal");
 				}
 			}
+			
+			var tokenDelimiter = 'ˇ';
+			function startReader(){
+			console.log(window.sq);
+			  if(window.sq){
+				sq.again();
+				// window.sq.closed && window.document.dispatchEvent(new Event('squirt.again'));
+			  } else {
+				window.sq = {};
+				window.sq.userId = '--squirtUser--';
+				s = document.createElement('script');
+				s.src = '//squirt/squirt.js';
+				document.body.appendChild(s);
+			  }
+			}
+			
 		</script>
 </head>
 <body>
 	<form id="form" action="">
 	<div id="enter">
 		<label for="resizable">Enter Text:</label>
-	<textarea id="resizable" cols="30" rows="10" wrap="physical" name="text" maxlength="3000" placeholder="Enter text to CLASH"></textarea>
+	<textarea id="resizable" cols="30" rows="10" wrap="physical" name="text" maxlength="30000" placeholder="Enter text to CLASH"></textarea>
 	<div for="resizable" id="characterLeft"></div>
 		<button type="button" id="button">CLASH IT!</button>	
 	</div>
@@ -165,6 +181,7 @@
 
 
 	<div style="text-align: center;font-size:20px;">
+		<button type="button" onclick="startReader();">Start read</button>
 			<input type="checkbox" id="Slash" value="Slash" checked = "true" onclick="hideSlash()" >Slash 
 			<input type="checkbox" id="Exception" value="Exception" onclick="boldException()">Exception 
 			<input type="checkbox" id="Noun" value="Noun" onclick="changeColor('Noun','green')"><span style="color:green">Noun</span>

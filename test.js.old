@@ -1,44 +1,13 @@
 'use strict';
 
-
+//Node application
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var PythonShell = require('python-shell');
-var mysql      = require('mysql');
-
-/**
-  MYSQL
-**/
-
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user	   : 'testuser',
-  password : '', 
-  port     : 3306,
-  database : 'CLASH'
-});
-
-/*if (connection){
-	console.log('sql connection!', connection)
-}
-else{
-	console.log('sql not connect!')
-}*/
 
 
-    connection.query(' SELECT * FROM USER', function(err, rows) {
-     if(err){
-        console.log('sql error log:', err.code);
-     }
-     else{
-       console.log(rows);
-     }
-     
-});
-
-connection.end();
 
 http.listen(3000, function(){
   console.log('Express server listening on port %d in %s mode',http.address().port, app.settings.env);
@@ -100,11 +69,6 @@ var
     console.log('Sent:', fileName);
   }
   });
-
-
-
-
-
 
 });
 
