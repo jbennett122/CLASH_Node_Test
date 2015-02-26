@@ -51,8 +51,8 @@
 
 		
 		<script>
-			var json;
-			function parseJSON(){
+		
+			function parseJSON(json){
 				var contents = json.contents;
 				var str = "";
 				for(i=0; i<contents.length;i++){
@@ -170,8 +170,8 @@
 
 		socket.on('response', function(msg){
 			console.log('response recieved ' + msg);
-			json = JSON.parse(msg);
-			var str =(parseJSON());
+			var json = JSON.parse(msg);
+			var str =(parseJSON(json));
 			document.getElementById("content").innerHTML = str;
 			hideSlash();
 		});

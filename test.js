@@ -1,7 +1,16 @@
 'use strict';
 
+//Node application
+//var 
+  //http = require( 'http' ),
+  //express = require( 'express' ),
+  //app = express(),
+  //url = require('url'),
+  //io = require('socket.io'),
 
-var app = require('express')();
+  //server = http.createServer( app );
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -13,32 +22,20 @@ var mysql      = require('mysql');
 **/
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user	   : 'testuser',
-  password : '', 
-  port     : 3306,
+  host     : 'esl-clash.cs.odu.edu',
+  port     : '3306',
   database : 'CLASH'
 });
 
-/*if (connection){
-	console.log('sql connection!', connection)
-}
-else{
-	console.log('sql not connect!')
-}*/
-
-
-    connection.query(' SELECT * FROM USER', function(err, rows) {
+connection.query(' SELECT * FROM USER', function(err, rows) {
      if(err){
-        console.log('sql error log:', err.code);
+        console.log(err.code);
      }
      else{
        console.log(rows);
      }
-     
 });
 
-connection.end();
 
 http.listen(3000, function(){
   console.log('Express server listening on port %d in %s mode',http.address().port, app.settings.env);
@@ -79,7 +76,7 @@ var
         	'x-timestamp': Date.now(),
         	'x-sent': true
     	}
-  };	
+	};	
 
     var fileName = '/test.html';
     
@@ -101,54 +98,51 @@ var
   }
   });
 
-
-
-
-
-
 });
 
 
 
 //Socket.IO and python-shell
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
     sessionsConnections[socket.handshake.sessionID] = socket;
-    
-    console.log('connected to client')
-    
-    socket.on('text', function(msg){
-		console.log('input: '+msg);
-		var options = {
-		  args: [msg]
-		};
-		console.log('options: '+options);
-		
-		PythonShell.run('parse_pos.py',options, function (err, results) {
-		  if (err) 
-			throw err;
-		  // results is an array consisting of messages collected during execution 
-		  console.log('result: '+results);
-		  var java = require("java");
-		   java.classpath.push("slash.jar");//Needs to be on the same path as of .js file
-		   var clasis = java.newInstanceSync("main.Main");
-		   clasis.main(results[0],1, function (error,data)
-			 { 
-				if(error){
-					console.log('err: '+error);
-					socket.emit('response', error);
-				}else{
-					console.log("Returned data "+data);
-					socket.emit('response', data);
-				}
-				
-			   
 
-			 });
-		});
-		console.log('\n\n===============================after io and pos\n\n')
-  });
+    console.log('connected to client')
+
+    socket.on('text', function(msg) {
+        console.log('input: ' + msg);
+        var options = {
+            args: [msg]
+        };
+        console.log('options: ' + options);
+
+        PythonShell.run('parse_pos.py', options, function(err, results) {
+            if (err) {
+                console.log('error from python: ' + error);
+                socket.emit('response', error);
+            } else {
+                // results is an array consisting of messages collected during execution 
+                console.log('result: ' + results);
+				
+                var java = require("java");
+                java.classpath.push("slash.jar"); //Needs to be on the same path as of .js file
+                var clasis = java.newInstanceSync("main.Main");
+                clasis.main(results[0], 1, function(error, data) {
+                    if (error) {
+                        console.log('err from java: ' + error);
+                        socket.emit('response', error);
+                    } else {
+                        console.log("Returned data " + data);
+                        socket.emit('response', data);
+                    }
+                });
+            }
+        });
+        console.log('\n\n===============================after io and pos\n\n')
+    });
 });
 
+// open public folder
+app.use(express.static(__dirname + '/public'));
 
 
 
