@@ -33,7 +33,9 @@ function e(t, n, r) {
             var data = e.data;
             var event = data.event;
             if (event === undefined) return;
+					//console.log('event: '+data.event);
             delete data.event;
+	
             if (event.match(/squirt\./)) evt.dispatch(event, data);
         });
 
@@ -65,7 +67,7 @@ function e(t, n, r) {
                     style: "visibility: hidden"
                 }, document.body);
                 container.innerHTML = html;
-				console.log('html: '+html);
+				//console.log('html: '+html);
                 var children = container.children;
                 container.remove();
                 return children.length > 1 ? js.array(children) : children[0];
@@ -364,6 +366,7 @@ function e(t, n, r) {
             on: function(buses, evts, cb, processedArgs) {
                 if (!processedArgs) return evt.on.apply(null, evt._onArgs.apply(null, arguments));
                 js.map2d(buses, evts, function(bus, evt) {
+				//console.log(bus+'  :  '+evt);
                     bus.addEventListener(evt, cb);
                 })
                 return function() {
@@ -461,13 +464,13 @@ function e(t, n, r) {
             loading.show();
             sq.pageContent = jtf.grabArticleText();
 
-            dom.injectStylesheet('/squirt/frame.outer.css');
+            dom.injectStylesheet('squirt/css/frame.outer.css');
 
             // inject reader iframe
            
 
             var iframeSrc = 
-                '/squirt/views/iframe.html';
+                'squirt/views/iframe.html';
 
             sq.innerFrame = createIframe(iframeSrc, _.compose(
                 loading.hide,
@@ -512,7 +515,7 @@ function e(t, n, r) {
         function createIframe(src, onLoad) {
             var frame = dom.makeEl('iframe', {
                 src: src,
-				style: "top:20%",
+				//style: "top:80%", // change to set layout
                 class: 'sq-frame'
             }, document.body);
             frame.style.border = 0
@@ -541,7 +544,6 @@ function e(t, n, r) {
 		
 		
 		function getTextFromJson(){
-			console.log(tokenDelimiter);
 				var contents = json.contents;
 				var text ="";
 				var str = "";
@@ -614,10 +616,7 @@ function e(t, n, r) {
 						}
 						
 					}	
-					//text+="\n"+tokenDelimiter;
-					//str="";
 				}
-				console.log(text+" "+str);
 				return text+" "+str;
 		}
 		
@@ -1471,7 +1470,7 @@ function e(t, n, r) {
 					);
                     loading.wrapperEl = dom.compileHtml(loadingHtml);
 				//	;position: relative;top: 50%;transform: translateY(-50%)
-					console.log('wrapper: '+dom.compileHtml(loadingHtml));
+				//	console.log('wrapper: '+dom.compileHtml(loadingHtml));
                     document.body.appendChild(loading.wrapperEl);
                     dom.addClass(dom.qs('.sq-loading'), 'visible');
                 },

@@ -717,15 +717,20 @@ var events = {
 evt.handle(events);
 
 function slideModalTo(offset, play){
+
   if(offset == 'settingsClosed'){
     var drawerHeight = dom.qs('.drawer').offsetHeight;
     offset = -drawerHeight;
+	$('.drawer').css('visibility','hidden');
   } else if(offset == 'hidden'){
     offset = -modal.offsetHeight;
+	
+  } else{
+	$('.drawer').css('visibility','visible');
   }
-
+//console.log('offset before: '+offset);
   var offsetStr = offset + "px";
-  console.log('offset: '+offset);
+  //console.log('offset after: '+offsetStr);
   var duration = 375;
 
   dom.transition(modal, duration, {target: 'top'});
@@ -733,13 +738,16 @@ function slideModalTo(offset, play){
 
   var outterFrameEvent = {top: modal.offsetHeight + offset, duration:duration};
   // comment out prevent white space on top
- // evt.dispatch('squirt.pageBodyOffsetTop', outterFrameEvent);
+  //evt.dispatch('squirt.pageBodyOffsetTop', outterFrameEvent);
   var clearTransitionEnd = evt.on(modal, dom.transitionEndEvents, function(){
     clearTransitionEnd();
     // tick here prevents glitchy interaction between transitions >:|
     play && js.tick(function(){evt.dispatch('squirt.play', {extraSlowStart: true});});
   });
 }
+
+
+
 },{"./cross-frame-events":2,"./dom":3,"./evt":4,"./js":7,"./reader":11,"./sq":14,"./user-settings":16,"underscore":21}],6:[function(require,module,exports){
 var evt = require('./evt'),
     dom = require('./dom'),
@@ -971,8 +979,7 @@ var tokenDelimiter = 'ˇ';
 function textToNodes(text) {
   text = text.trim('\n').replace(/\s+\n/g,'\n');
   var array = text.replace(/[-—\,\.\!\:\;](?![\"\'\)\]\}])/g, "$& ").split(tokenDelimiter);
-  for( t in array)
-	console.log(array[t]);
+
   var totalDelay = 0;
   var length = 0;
   var nodes = text
@@ -985,10 +992,9 @@ function textToNodes(text) {
          .map(function(node){ 
 		 totalDelay += node.delayFactor; return node})
 		 .map(function(node){
-			length+=node.word.trim().split(/[\s]+/g).length; return node});
-  avgDelayPerWord = totalDelay / length;
-  
-  //console.log('node: '+nodes);
+			length+=node.word.trim().split(/[\s]+/g).length; return node
+		 });
+	avgDelayPerWord = totalDelay / length;
   return nodes;
 };
 
@@ -1077,7 +1083,7 @@ var _ = require('underscore'),
 var settings = dom.qs('.toolbar-settings');
 evt.on(settings, 'click', _.partial(evt.dispatch, 'squirt.toggleSettings', null, null));
 
-var sans = dom.qs('.font-option.sans');
+/*var sans = dom.qs('.font-option.sans');
 var serif = dom.qs('.font-option.serif');
 var opts = [sans, serif];
 evt.on(opts, 'click', function(e){
@@ -1090,7 +1096,7 @@ evt.on(opts, 'click', function(e){
 
 js.tick(function(){
   evt.dispatch('click', {}, userSettings.get('sansFont') ? sans : serif);
-});
+});*/ // remove font change
 
 },{"./dom":3,"./evt":4,"./js":7,"./sq":14,"./user-settings":16,"underscore":21}],14:[function(require,module,exports){
 // `sq` is global object and event bus used inside the squirt iframe
@@ -1206,26 +1212,8 @@ var w = {
     node.delayFactor = w.getDelay(node);
 
     return node;
-  },
-
-  // markup used for controlling the speed of the demo text
-  instructionsRE:  /#SQ(.*)SQ#/,
-  parseSQInstructionsForWord: function(word, node){
-    var match = word.match(w.instructionsRE);
-    if(match && match.length > 1){
-      node.instructions = [];
-      match[1].split('#')
-      .filter(function(w){ return w.length; })
-      .map(function(instruction){
-        var val = Number(instruction.split('=')[1]);
-        node.instructions.push(function(){
-          evt.dispatch('squirt.wpm', {value: val, notForKeen: true})
-        });
-      });
-      return word.replace(w.instructionsRE, '');
-    };
-    return word;
   }
+
 }
 
 module.exports = w;

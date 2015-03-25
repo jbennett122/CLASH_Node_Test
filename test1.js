@@ -61,15 +61,6 @@ var
   	skip: function(req,res) {return res.statusCode < 400} 
   });
 
-	app.set('views', __dirname + '/views');
-	app.engine('html', require('ejs').renderFile);
-
-	app.set('view engine', 'ejs');
-
-	app.get('/about', function (req, res)
-	{
-		res.render('about.html');
-	});
 
   
   app.get( '/', function ( request, response ) {
@@ -106,21 +97,12 @@ var
     console.log('Sent:', fileName);
   }
   });
-  
-
 
 });
 
-  //test2.html
-  app.get('/test2.html', function (request, response){
-    response.render('index.html');
-  });
+
 
 //Socket.IO and python-shell
-io.of('/dev').on('connection',function(socket){
-   console.log('connected to dev');
-});
-
 io.on('connection', function(socket) {
     sessionsConnections[socket.handshake.sessionID] = socket;
 
@@ -182,7 +164,7 @@ io.on('connection', function(socket) {
 				 * @return
 				 * 			
 				 */
-                slash.parseSlash(results[0], 'from day to day;from year to year',3,7, function(error, data) {
+                slash.parseSlash(results[0], "from day to day;from year to year",3,7, function(error, data) {
                     if (error) {
                         console.log('err from java: ' + error);
                         socket.emit('response', error);

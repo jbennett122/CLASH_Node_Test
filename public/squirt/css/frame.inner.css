@@ -141,7 +141,7 @@ input {
   position: absolute;
   bottom: 1em;
   left: 1em;
-  color: #dedede;
+  color: #000000;
   cursor: pointer;
 }
 
@@ -248,7 +248,7 @@ input {
 
 .reader {
   box-shadow: 0 0px 6px rgba(0,0,0,.3);
-  height: 280px;
+  height: 580px;
   position: relative;
 }
 
@@ -258,7 +258,7 @@ input {
   height: 100%;
   left: 45%;
   width: 55%;
-  border-left: 1px solid rgba(0,0,0, .2);
+
   font-size: 2em;
 }
 
@@ -305,12 +305,12 @@ input {
 }
 
 .focus-node .orp, .font-option .orp{
-  color: rgb(3, 144, 255)
+  /*color: rgb(3, 144, 255)*/
 }
 
 .focus-indicator-gap {
   position: absolute;
-  top: 33%;
+  top: 35%;
   background-color: #FDFDFD;
   width: 2px;
   left: -2px;

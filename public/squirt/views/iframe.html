@@ -2,18 +2,36 @@
 <html>
   <head>
 
-    <link rel='stylesheet' href='../fonts/ss-pika.css'>
-    <link rel='stylesheet' href='../css/frame.inner.css'>
+    <link rel='stylesheet' href='/squirt/fonts/ss-pika.css'>
+    <link rel='stylesheet' href='/squirt/css/frame.inner.css'>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script>
+		var size = 2;
+		function changeFont(){
+			$(".carousel").css('font-size',size+'em');
+		}
+		function inc(){
+			size+=0.2;
+			changeFont();
+		}
+		function dec(){
+			size-=0.2;
+			changeFont();
+		}
+	</script>
   </head>
   <body>
     <div class="article-veil"></div>
     <div class="modal">
       <div class="drawer">
         <div class="drawer-content">
+		<pre>Restart the reader after change font size</pre>
           <ul class='font-selector'>
-            <li class='font-option serif'>S<span class='orp'>e</span>rif</li>
-            <li class='font-option sans'>S<span class='orp'>a</span>ns</li>
+		  
+            <li class='font-option small'><span style='font-size:1em' onclick="dec();">Smaller</span></li>
+            <li class='font-option medium'><span style='font-size:2em' onclick="inc();">Larger</span></li>
+			
           </ul>
           <ul class='keyboard-shortcuts'>
             <li>
@@ -79,11 +97,10 @@
           <ul class="nodes"></ul>
         </div>
         <div class="reader-content">
-          <img class='share-logo' src='../images/logo.png'/>
+          <img class='share-logo' src='/images/ClashLogo.png' style="width:250px;height:188px" />
           <div class="feature-requests">
           </div>
-          <h3 class='tweet-preview'>&ldquo;The Internet is too damn long! Read it
-            at 350-1000 words per minute with Squirt.&rdquo;
+          <h3 class='tweet-preview'>&ldquo;You can be a hero in an age of none.&rdquo;
           </h3>
           
 		</div>
@@ -118,6 +135,6 @@
 			
 
     </div>
-    <script src="../frame.inner.js"></script>
+    <script src="/squirt/frame.inner.js"></script>
 </body>
 </html>
